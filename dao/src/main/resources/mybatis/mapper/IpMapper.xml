@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laoxu.java.mailtest.dao.IpDao">
+
+    <resultMap id="ipMap" type="com.laoxu.java.mailtest.entity.Ip">
+        <result property="id" column="id"/>
+        <result property="ip" column="ip"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.laoxu.java.mailtest.entity.Ip">
+        insert into ip (
+        id
+        <if test="ip !=null and ip !='' ">
+           ,ip
+        </if>
+        <if test="createTime !=null  ">
+           ,create_time
+        </if>
+        )
+        values (
+            #{id}
+        <if test="ip !=null and ip !='' ">
+            ,#{ip}
+        </if>
+        <if test="createTime !=null  ">
+            ,#{createTime}
+        </if>
+        )
+      </insert>
+    <select id="selectList" parameterType="String" resultType="java.lang.Integer">
+    select count(1)
+    from ip
+     where ip=#{ip}
+</select>
+    <select id="selectListCount" parameterType="Integer" resultType="java.lang.Integer">
+    select count(1)
+    from ip
+</select>
+</mapper>
+
+

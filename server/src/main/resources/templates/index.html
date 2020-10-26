@@ -1,0 +1,266 @@
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+
+<head>
+    <meta charset="UTF-8">
+    <title>报名</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src=" http://lib.h-ui.net/jquery.form/3.51.0/jquery.form.min.js"></script>
+
+    <script type="text/javascript">
+        function check() {
+            var departmentTwo=document.getElementById("departmentTwo");
+            var tel=form1.tel.value;
+            var username = document.getElementById("userName");
+            var name = form1.name.value.replace(/\s+/g, "");
+            var pw1 = document.form1.password.value;
+            var pw2 = document.form1.password2.value;
+            var gender = document.getElementById("gender");
+            var profession = document.getElementById("profession");
+            var grade = form1.grade.value;
+            var year = document.getElementById("year");
+            var month = document.getElementById("month");
+            var day = document.getElementById("day");
+            var department = document.getElementById("department");
+            var patrn = /^[\u4e00-\u9fa5]+$/i;
+            var hz = name.replace(/[^\u4e00-\u9fff]/g, "").length;
+            var introduce=document.getElementById('introduce').value.trim();
+            var region=document.form1.region.value;
+            var filename= $('#filename').get(0).files[0];
+            var email=form1.email.value;
+
+
+         if(filename==""||filename==null){
+                alert("文件呢？？");
+                form1.filename.focus();
+                return false;
+            }
+        else if(email==""||email==null){
+                alert("邮箱不能为空！");
+                form1.filename.focus();
+                return false;
+            }
+           else if ((name == "") || (name == null)) {
+                alert("你叫啥名字？");
+                form1.name.focus();
+                return false;
+            }
+            else if (!patrn.exec(name)) {
+                alert("别给英文名。。");
+                form1.name.focus();
+                return false;
+            } else if (hz <= 1 || hz >= 5) {
+                alert("名字是不是有问题。。");
+                form1.name.focus();
+                return false;
+            }
+          else  if (gender.value == "") {
+                alert("你是男孩子还是女孩子？");
+                form1.gender.focus();
+                return false;
+            }  else if(tel==""||tel==null){
+                alert("电话号码不能为空！");
+                form1.filename.focus();
+                return false;
+            }else if ((profession.value == "")) {
+                alert("你专业是什么呢？");
+                form1.profession.focus();
+                return false;
+            } else if ((grade == "") || (grade == null)) {
+                alert("班级班级班级！");
+                form1.grade.focus();
+                return false;
+            }  else if (year.value == "") {
+                alert("出生年份？");
+                form1.year.focus();
+                return false;
+            } else if (month.value == "") {
+                alert("出生月份？");
+                form1.month.focus();
+                return false;
+            } else if (day.value == "") {
+                alert("几号生的呀？");
+                form1.day.focus();
+                return false;
+            } else if (department.value == "") {
+                alert("意向哪个部门呀？");
+                form1.department.focus();
+                return false;
+            }  else if(departmentTwo.value==""){
+            alert("还有第二意向部门没填！");
+            form1.filename.focus();
+            return false;
+        }else if(region.length==0){
+                alert("敢问，大侠/少女来自何处？");
+                form1.region.focus();
+                return false;
+            }else if(introduce.length==0){
+                alert("你的自我介绍还没写呀");
+                form1.introduce.focus();
+                return false;
+            }else if ((username.value.replace(/\s+/g,"")== '')==false) {
+                if (username.value.length < 3 || username.value.length > 9) {
+                    alert("用户名必须在3~9");
+                    form1.userName.focus();
+                    return false;
+            } else if ((pw1 == "") || (pw1 == null)) {
+                    alert("密码都不要了？");
+                    form1.password.focus();
+                    return false;
+                } else if ((pw2 == "") || (pw2 == null) || pw2 !== pw1) {
+                    alert("要确认好密码哦");
+                    form1.password2.focus();
+                    return false;
+                }
+            }
+
+
+        }
+
+
+
+
+    </script>
+    <script th:inline="javascript" >
+        $(function () {
+            /*
+             获取form元素，调用其ajaxForm(...)方法
+             内部的function(data)的data就是后台返回的数据
+            */
+
+            $("#form1").ajaxForm(function (data) {
+                if(data=="0"){
+                    alert("你滴照骗是不是出问题了？");
+                }
+                if(data=="2") {
+                    alert("邮箱已经被使用了哦！");
+
+                }
+                if(data=="3") {
+                    alert("邮箱不要忘记填了，很重要！");
+
+                } if(data=="4") {
+                    alert("邮箱格式不对哦！");
+
+                }
+                if(data=="5") {
+                    alert("你瞧瞧是不是有空的没填？");
+                }
+                if(data=="1") {
+                    alert("报名成功！请前往邮箱点击链接登录，登录成功就行");
+                    $("#form1").toggle();
+
+                    window.location.replace("http://47.114.57.50:8080/success.html");
+                }
+                }
+            );
+
+        });
+
+    </script>
+
+</head>
+<body >
+
+
+
+<footer class="color-F00" style="color:#CCC; background:#630202;border-top:1px solid #871515; padding:10px 0 30px 0; width:100%">
+    　　© 鳝溪易班在线报名系统内测版 0.1.1<br />
+    　　     欢迎您的测试!<p th:text="${user}"></p>
+</footer>
+<form id="form1" name="form1" runat=server action="/user/register"  method="post"  enctype="multipart/form-data" onsubmit="return check()" >
+    <img id="cropedBigImg" value='custom' alt="个人照片" data-address='' src="/img/1.jpg" style="width: 100px;height: 100px"/>
+    上传头像：<input type="file" name="filename" id= "filename" runat=server multiple="multiple" accept="image/*"  /><br/><br/>
+    <p style="color: red">*</p>  邮箱：<input type="email" id="emailq" name="email" /><br>
+    电话号码：<input type="text" id="tel" name="tel" /><br>
+    <p style="color: red">*</p>姓名：<input type="text" id="name" name="name" /><br>
+    <p style="color: red">*</p> 性别：<select id="gender" name="gender">
+    <option value="">  </option>
+    <option value="男">男</option>
+    <option value="女">女</option>
+</select>
+    <p style="color: red">*</p> 专业：<select  id="profession" name="profession"/><br>
+    <option value="">   </option>
+    <option value="工商管理">工商管理</option>
+    <option value="国际贸易">国际贸易</option>
+    <option value="国际商务">国际商务</option>
+    <option value="电子商务">电子商务</option>
+    <option value="金融工程">金融工程</option>
+    <option value="市场营销">市场营销</option>
+    <option value="财务管理">财务管理</option>
+    </select>
+    <p style="color: red">*</p>  班级：<input type="text" id="grade" name="grade"/><br>
+    <p style="color: red">*</p>  出生日期：年：<select id="year" name="year">
+    <option value="">  </option>
+</select>月：<select id="month" name="month">
+    <option value="">  </option>
+</select>日：<select id="day" name="day">
+    <option value="">  </option>
+</select>
+    <p style="color: red">*</p> 第一意向学生组织鳝溪易班部门：<select id="department" name="department">
+    <option value="">   </option>
+    <option value="摄影部">摄影部</option>
+    <option value="编辑部">编辑部</option>
+    <option value="技术部">技术部</option>
+    <option value="网科组(运营部)">网科组(运营部)</option>
+</select>
+
+    <p style="color: red">*</p> 第二意向学生组织：<select id="departmentTwo" name="departmentTwo">
+    <option value="">   </option>
+    <option value="就想去易班"> 就想去易班  </option>
+    <option value="自律会督导部">自律会督导部</option>
+    <option value="鳝溪电台播音部">鳝溪电台播音部</option>
+    <option value="学生会组织部">学生会组织部</option>
+</select>
+    来自何处？：<input type="text" id="region" name="region"/><br>
+    <p>自我介绍：</p>
+    <textarea id="introduce" name="introduce" cols="30" rows="4" placeholder="请在这里填写自我介绍"></textarea>
+    用户名：<input type="text" id="userName" name="userName"/><br>
+    密码：<input type="password" id="password" name="password"/><br>
+    确认密码：<input type="password" id="password2" name="password2" /><br>
+    <input type="hidden" name="selectEmail" id="selectEmail" value="${selectEmail}">
+    <input type="submit" value="报名" id="submitBtn" >
+
+</form>
+
+<script>
+
+    $('#filename').on('change',function(){
+        var filePath = $(this).val();         //获取到input的value，里面是文件的路径
+        var fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase();
+        // 检查是否是图片
+        if( !fileFormat.match(/.png|.jpg|.jpeg/) ) {
+            error_prompt_alert('上传错误,文件格式必须为：png/jpg/jpeg');
+            return;
+        }
+        var src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
+        $('#cropedBigImg').attr('src',src);
+    });
+</script>
+<script >
+    //出生日期下拉框内容
+    function gel(id) { return document.getElementById(id); }
+    function gel1(id1) { return document.getElementById(id1); }
+    function gel2(id2) { return document.getElementById(id2); }
+    window.onload = function() {
+        var cbbYear = gel("year");
+        var cbbDay = gel1("day");
+        var cbbMonth = gel2("month");
+        for (var i = 1990; i <= 2020; i++) {
+            var opt = new Option(i, i);
+            cbbYear.options.add(opt);
+        }
+        for (var i = 1; i <32; i++) {
+            var opt = new Option(i, i);
+            cbbDay.options.add(opt);
+        }
+        for (var i=1; i <=12; i++) {
+            var opt = new Option(i, i);
+            cbbMonth.options.add(opt);
+        }
+    };
+
+</script>
+</body>
+</html>

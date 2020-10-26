@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.czf.apply.dao.mapper.UserMapper">
+
+    <resultMap id="userMap" type="com.czf.apply.dao.entity.User">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
+        <result property="tel" column="tel"/>
+        <result property="activeStatus" column="active_status"/>
+        <result property="activeCode" column="active_code"/>
+        <result property="fileName" column="file_name"/>
+        <result property="dateOfBirth" column="date_of_birth"/>
+        <result property="department" column="department"/>
+        <result property="departmentTwo" column="department_two"/>
+        <result property="gender" column="gender"/>
+        <result property="grade" column="grade"/>
+        <result property="profession" column="profession"/>
+        <result property="gameUserId" column="game_user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="gameTime" column="game_time"/>
+        <result property="gameUserId" column="game_user_id"/>
+        <result property="introduce" column="introduce"/>
+        <result property="region" column="region"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"  parameterType="com.czf.apply.dao.entity.User" >
+
+        insert into user (
+            id
+        <if test="name!=null and name!=''">
+           ,name
+        </if>
+        <if test="email!=null and email!=''">
+           ,email
+        </if>
+        <if test="tel !=null and tel !=''">
+            ,tel
+        </if>
+        <if test="activeStatus!=null and activeStatus!=''">
+           ,active_status
+        </if>
+        <if test="activeCode!=null and activeCode!='' ">
+           ,active_code
+        </if>
+        <if test="fileName !=null and fileName!=''">
+           ,file_name
+        </if>
+            ,date_of_birth
+         <if test="department !=null and department !=''">
+            ,department
+         </if>
+        <if test="departmentTwo !=null and departmentTwo !=''">
+            ,department_two
+        </if>
+         <if test="gender !=null and gender !=''">
+            ,gender
+         </if>
+         <if test="grade !=null and grade !=''">
+             ,grade
+         </if>
+         <if test="profession !=null and profession !='' ">
+             ,profession
+         </if>
+         <if test=" gameUserId !=null and  gameUserId !=''">
+              ,game_user_id
+          </if>
+          <if test="createTime !=null ">
+              ,create_time
+          </if>
+          <if test="gameTime !=null ">
+              ,game_time
+          </if>
+        <if test="introduce !=null and introduce !=''">
+            ,introduce
+        </if>
+        <if test="    region !=null and     region !=''">
+            ,    region
+        </if>
+
+      )
+        values (
+            UUID()
+        <if test="name!=null and name!=''">
+            ,#{name}
+        </if>
+        <if test="email!=null and email!=''">
+            ,#{email}
+        </if>
+        <if test="tel !=null and tel !=''">
+            ,#{tel}
+        </if>
+        <if test="activeStatus!=null and activeStatus!=''">
+            ,#{activeStatus}
+        </if>
+        <if test="activeCode!=null and activeCode!='' ">
+            ,#{activeCode}
+        </if>
+        <if test="fileName !=null and fileName!=''">
+            ,#{fileName}
+        </if>
+
+            ,#{dateOfBirth}
+
+        <if test="department !=null and department !=''">
+            ,#{department}
+        </if>
+        <if test="departmentTwo !=null and departmentTwo !=''">
+            ,#{departmentTwo}
+        </if>
+        <if test="gender !=null and gender !=''">
+            ,#{gender}
+        </if>
+        <if test="grade !=null and grade !=''">
+            ,#{grade}
+        </if>
+        <if test="profession !=null and profession !='' ">
+            ,#{profession}
+        </if>
+        <if test=" gameUserId !=null and gameUserId !=''">
+            ,#{gameUserId}
+        </if>
+        <if test="createTime !=null ">
+            ,#{createTime}
+        </if>
+        <if test="gameTime !=null ">
+            ,#{gameTime}
+        </if>
+        <if test="introduce !=null and introduce !=''">
+            ,#{introduce}
+        </if>
+        <if test=" region !=null and  region !=''">
+            ,#{region}
+        </if>
+
+        )
+      </insert>
+    <select id="selectList" parameterType="String" resultType="com.czf.apply.dao.entity.User">
+    select count(*)
+    from user
+    where email=#{email}
+</select>
+    <select id="selectUserByActiveCode" parameterType="String" resultType="com.czf.apply.dao.entity.User">
+        select *
+        from user
+        where active_code = #{activeCode}
+     </select>
+    <select id="selectDepartment" parameterType="String" resultType="com.czf.apply.dao.entity.GameItem">
+        select id,dict_item_name as department
+        from dict_item
+        where status=0 and dict_item_code='department_type'
+        order by dict_item_name ASC
+     </select>
+    <select id="selectClassType" parameterType="String" resultType="com.czf.apply.dao.entity.GameItem">
+        select id,dict_item_name as className
+        from dict_item
+        where status=0 and dict_item_code='class_type'
+        order by dict_item_name ASC
+     </select>
+    <!--激活账户，修改用户状态-->
+    <update id="update" parameterType="com.czf.apply.dao.entity.User">
+      update user
+      set active_status=#{activeStatus},name=#{name},
+          email=#{email}, active_code=#{activeCode},game_user_id=#{gameUserId}
+      where id=#{id}
+    </update>
+
+
+
+    <select id="selectEmail" resultType="java.lang.Integer">
+      select count(*)
+      from user
+      where email=#{email}
+    </select>
+</mapper>

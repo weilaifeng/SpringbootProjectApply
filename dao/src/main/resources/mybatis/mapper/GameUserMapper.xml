@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laoxu.java.mailtest.dao.GameUserDao">
+
+    <resultMap id="userMap" type="com.laoxu.java.mailtest.entity.GameUser">
+        <result property="id" column="id"/>
+        <result property="userName" column="user_name"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="identity" column="identity"/>
+        <result property="activeStatus" column="active_status"/>
+        <result property="activeCode" column="active_code"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.laoxu.java.mailtest.entity.GameUser">
+        insert into game_user (
+            id
+        <if test="userName !=null and userName !='' ">
+           ,user_name
+        </if>
+        <if test="email !=null and email !='' ">
+           ,email
+        </if>
+        <if test="password !=null and password !='' ">
+           ,password
+        </if>
+        <if test="activeStatus !=null and activeStatus !='' ">
+           ,active_status
+        </if>
+        <if test="identity !=null and identity !=''">
+            ,identity
+        </if>
+        <if test="activeCode !=null and activeCode !='' ">
+           ,active_code
+        </if>
+        <if test="createTime !=null  ">
+           ,create_time
+        </if>
+        )
+        values (
+             UUID()
+        <if test="userName !=null and userName !='' ">
+            ,#{userName}
+        </if>
+        <if test="email !=null and email !='' ">
+            ,#{email}
+        </if>
+        <if test="password !=null and password !='' ">
+            ,#{password}
+        </if>
+        <if test="activeStatus !=null and activeStatus !='' ">
+            ,#{activeStatus}
+        </if>
+        <if test="identity !=null and identity !=''">
+            ,#{identity}
+        </if>
+        <if test="activeCode !=null and activeCode !='' ">
+            ,#{activeCode}
+        </if>
+        <if test="createTime !=null  ">
+            ,#{createTime}
+        </if>
+        )
+      </insert>
+    <select id="selectList" parameterType="String" resultType="com.laoxu.java.mailtest.entity.GameUser">
+    select count(*)
+    from user
+     where email=#{email}
+</select>
+    <select id="selectUserByActiveCode" parameterType="String" resultType="com.laoxu.java.mailtest.entity.GameUser">
+        select *
+         from game_user
+          where active_code = #{activeCode}
+     </select>
+
+    <select id="selectGameId" parameterType="String" resultType="java.lang.Object">
+        select id
+         from game_user
+          where email=#{email}
+     </select>
+    <!--激活账户，修改用户状态-->
+    <update id="update" parameterType="com.laoxu.java.mailtest.entity.GameUser">
+      update game_user
+      set active_status=#{activeStatus},user_name=#{userName},
+          email=#{email},active_code=#{activeCode}
+      where id=#{id}
+    </update>
+
+
+
+    <!--登录,根据 activeStatus=1 进行查询-->
+    <select id="select" resultType="com.laoxu.java.mailtest.entity.GameUser">
+      select *
+      from game_user
+      where user_name=#{userName}
+      and password=#{password}
+    and active_status='1'
+    </select>
+
+    <select id="selectEmail" resultType="java.lang.Integer">
+      select count(*) from user where email=#{email} and active_status='1'
+    </select>
+
+    <select id="selectId" resultType="com.laoxu.java.mailtest.entity.GameUser">
+      select * from user where email=#{email} and active_status='1'
+    </select>
+
+</mapper>
+
+
