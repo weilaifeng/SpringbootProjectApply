@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class GameItem {
 
+
     //意向部门id
     private String id;
     //意向部门
